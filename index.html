@@ -1,0 +1,2146 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ADMIN BOT REMOTE</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AdminBot">
+<link rel="apple-touch-icon" href="/logo.jpg">
+<link rel="icon" type="image/jpeg" href="/logo.jpg">
+<link rel="shortcut icon" type="image/jpeg" href="/logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<style>
+:root {
+  --bg-primary: #070a13;
+  --bg-secondary: #0c1020;
+  --bg-glass: rgba(17, 26, 46, 0.55);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glass-active: rgba(99, 102, 241, 0.35);
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --accent-cyan: #06b6d4;
+  --accent-blue: #3b82f6;
+  --accent-indigo: #6366f1;
+  --accent-green: #10b981;
+  --accent-red: #ef4444;
+  --accent-amber: #f59e0b;
+  --shadow-neon: 0 0 25px rgba(99, 102, 241, 0.2);
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-primary);
+  background-image: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+                    radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 45%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+.wrap { max-width: 1280px; margin: auto; padding: 24px; }
+
+/* Sleek Glowing Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 16px 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.header-brand { display: flex; align-items: center; gap: 12px; }
+.header-logo {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  color: white;
+  box-shadow: var(--shadow-neon);
+}
+.header-title h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(to right, #ffffff, #c7d2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.header-status { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+  box-shadow: 0 0 12px var(--accent-green);
+  animation: pulse 1.8s infinite;
+}
+
+/* Sidebar and Main Layout */
+.layout { display: grid; grid-template-columns: 240px 1fr; gap: 24px; }
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nav-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  color: var(--text-muted);
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+.nav-btn:hover {
+  background: rgba(255,255,255,0.03);
+  color: var(--text-main);
+}
+.nav-btn.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.05));
+  border: 1px solid var(--border-glass-active);
+  color: white;
+  box-shadow: var(--shadow-neon);
+}
+.nav-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+.main-content {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  padding: 24px;
+  min-height: 580px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+/* Glass Card Component */
+.card {
+  background: rgba(12, 16, 32, 0.45);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Sleek Grid Metrics */
+.metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.metric-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition-smooth);
+}
+.metric-card:hover { transform: translateY(-3px); border-color: rgba(99, 102, 241, 0.25); }
+.metric-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.metric-title { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.metric-value { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 700; color: white; }
+.metric-icon { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.05); }
+
+/* Buttons & Inputs */
+.input, .select, textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-glass);
+  background: rgba(7, 10, 19, 0.7);
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  transition: var(--transition-smooth);
+}
+.input:focus, .select:focus, textarea:focus {
+  border-color: var(--accent-indigo);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.18);
+}
+.row { display: flex; gap: 12px; margin-bottom: 16px; }
+.row-item { flex: 1; }
+
+button {
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent-indigo), var(--accent-blue));
+  color: white;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+}
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-neon);
+  filter: brightness(1.1);
+}
+button.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass);
+}
+button.secondary:hover { background: rgba(255, 255, 255, 0.12); box-shadow: none; }
+button.danger {
+  background: linear-gradient(135deg, #f43f5e, var(--accent-red));
+}
+button.danger:hover {
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.35);
+}
+
+/* Double column panel for Box Manager */
+.panel-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; }
+.list-wrapper { max-height: 520px; overflow-y: auto; padding-right: 4px; }
+.list-wrapper::-webkit-scrollbar { width: 5px; }
+.list-wrapper::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+.thread-item {
+  padding: 14px;
+  border: 1px solid var(--border-glass);
+  border-radius: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background: rgba(12, 16, 32, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: var(--transition-smooth);
+}
+.thread-item:hover {
+  border-color: rgba(255,255,255,0.15);
+  background: rgba(12, 16, 32, 0.55);
+}
+.thread-item.active {
+  border-color: var(--accent-indigo);
+  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(0,0,0,0.2));
+  box-shadow: 0 5px 15px rgba(99,102,241,0.05);
+}
+.thread-name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: white; }
+.thread-meta { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--text-muted); }
+.badge {
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 10px;
+}
+.badge.prefix { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.25); }
+.badge.free { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.25); }
+
+/* Switch Controls */
+.switches-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+.switch-control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid var(--border-glass);
+  border-radius: 12px;
+  background: rgba(12, 16, 32, 0.3);
+  font-size: 13px;
+  font-weight: 600;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 22px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255,255,255,0.1);
+  transition: .3s;
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px; width: 16px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+input:checked + .slider { background-color: var(--accent-indigo); }
+input:checked + .slider:before { transform: translateX(22px); }
+
+/* Vohan Box Controls */
+.vohan-box {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.05), rgba(99, 102, 241, 0.03));
+  border: 1px solid var(--border-glass);
+}
+
+/* User Tab UI components */
+.search-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Retro Log Panel */
+.log-panel {
+  background: #020617;
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  padding: 16px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #a7f3d0;
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  box-shadow: inset 0 5px 20px rgba(0,0,0,0.8);
+}
+.log-panel::-webkit-scrollbar { width: 6px; }
+.log-panel::-webkit-scrollbar-thumb { background: rgba(167, 243, 208, 0.2); border-radius: 3px; }
+
+/* Login Page Wrapper */
+.login-wrap {
+  max-width: 420px;
+  margin: 15vh auto;
+  text-align: center;
+}
+.login-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 28px;
+  padding: 40px 30px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.login-header {
+  margin-bottom: 28px;
+}
+.login-logo {
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: white;
+  margin: 0 auto 16px;
+  box-shadow: var(--shadow-neon);
+}
+.login-card h2 { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.login-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+.error-message {
+  margin-top: 12px;
+  color: var(--accent-red);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Responsive Grid and Layout Utilities */
+.grid-2col-responsive {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.grid-3col-responsive {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.grid-2col-tablet {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.rental-banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.rental-banner-status {
+  text-align: right;
+  min-width: 140px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .panel-grid {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    gap: 8px;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+    -ms-overflow-style: none;  /* Hide scrollbar IE/Edge */
+    -webkit-overflow-scrolling: touch;
+  }
+  .sidebar::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari/Opera */
+  }
+  .nav-btn {
+    width: auto;
+    flex-shrink: 0;
+    justify-content: center;
+    padding: 10px 16px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .main-content {
+    min-height: auto;
+    padding: 20px;
+  }
+  .grid-3col-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .wrap {
+    padding: 16px;
+  }
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    padding: 16px;
+  }
+  .header-brand {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .header-status {
+    justify-content: center;
+    width: 100%;
+    border-top: 1px solid var(--border-glass);
+    padding-top: 12px;
+    flex-wrap: wrap;
+  }
+  .list-wrapper {
+    max-height: 280px; /* Reduced list height on mobile for easier scrolling to detail panel */
+  }
+  .grid-2col-responsive {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .rental-banner-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .rental-banner-status {
+    text-align: left;
+    min-width: unset;
+  }
+  .search-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .search-container button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .row-item {
+    width: 100%;
+  }
+  .grid-2col-tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrap {
+    padding: 10px;
+  }
+  .main-content {
+    padding: 16px;
+  }
+  .card {
+    padding: 16px;
+  }
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .metric-card {
+    padding: 12px;
+  }
+  .metric-value {
+    font-size: 20px;
+  }
+  .metric-title {
+    font-size: 10px;
+  }
+  .grid-3col-responsive {
+    grid-template-columns: 1fr;
+  }
+  .switches-grid {
+    grid-template-columns: 1fr;
+  }
+  .row-item {
+    max-width: 100% !important;
+  }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+const controls = ['antiout', 'antinamebox', 'antiimage', 'antitheme', 'antibd', 'antiqtv', 'antijoin', 'antilink', 'antitag', 'anticall', 'antispam', 'onlyQTV', 'adminOnly'];
+const controlLabels = {
+  antiout: 'Anti out chùa',
+  antinamebox: 'Anti đổi tên nhóm',
+  antiimage: 'Anti đổi ảnh nhóm',
+  antitheme: 'Anti đổi chủ đề',
+  antibd: 'Anti đổi biệt danh',
+  antiqtv: 'Anti QTV (cướp box)',
+  antijoin: 'Anti thêm thành viên',
+  antilink: 'Anti gửi link',
+  antitag: 'Anti tag (all/nhiều)',
+  anticall: 'Anti call',
+  antispam: 'Anti spam',
+  onlyQTV: 'Chỉ QTV dùng bot',
+  adminOnly: 'Chỉ Admin dùng bot'
+};
+const state = {
+  threads: [],
+  selected: null,
+  status: null,
+  activeTab: 'box',
+  log: 'Hệ thống đã sẵn sàng.',
+  terminalLogs: [],
+  userSearchData: null,
+  tdResult: null,
+  tdLoading: false,
+  tdKeys: [],
+  tdAccountId: '',
+  tdSlotId: 1,
+  tdKey: 'EMDUA',
+  tdDate: moment().format('YYYY-MM-DD')
+};
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+
+async function request(path, opt = {}) {
+  const token = localStorage.getItem('bot_dashboard_token') || '';
+  const serverUrl = localStorage.getItem('bot_dashboard_server_url') || '';
+  const res = await fetch(serverUrl + '/api' + path, {
+    ...opt,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+      ...(opt.headers || {})
+    }
+  });
+  const data = await res.json().catch(() => ({ success: false, message: 'Lỗi định dạng dữ liệu' }));
+  if (!res.ok) throw new Error(data.message || 'Yêu cầu thất bại');
+  return data;
+}
+
+function renderLogin(msg = '') {
+  const serverUrl = localStorage.getItem('bot_dashboard_server_url') || '';
+  document.getElementById('root').innerHTML = `
+    <div class="wrap">
+      <div class="login-wrap">
+        <div class="login-card">
+          <div class="login-logo" style="overflow: hidden; padding: 0;"><img src="${serverUrl}/logo.jpg" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/logo.jpg'"></div>
+          <h2>Admin Bot Remote</h2>
+          <p>Nhập địa chỉ server và token bảo mật để kết nối.</p>
+          <input id="server-url" class="input" type="text" placeholder="Địa chỉ Server (để trống nếu chạy Local)" style="text-align: center; margin-bottom: 8px; font-size: 12px;" value="${esc(serverUrl)}">
+          <input id="token" class="input" type="password" placeholder="Mã bảo mật Dashboard" style="text-align: center;" value="" onkeydown="if(event.key==='Enter')login()">
+          <br><br>
+          <button onclick="login()" style="width: 100%; justify-content: center;">ĐĂNG NHẬP HỆ THỐNG</button>
+          <p class="error-message" id="error-msg">${esc(msg)}</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function login() {
+  const serverEl = document.getElementById('server-url');
+  let serverUrl = serverEl ? serverEl.value.trim() : '';
+  if (serverUrl && serverUrl.endsWith('/')) {
+    serverUrl = serverUrl.slice(0, -1);
+  }
+  const token = document.getElementById('token').value.trim();
+  localStorage.setItem('bot_dashboard_server_url', serverUrl);
+  localStorage.setItem('bot_dashboard_token', token);
+  try {
+    await load();
+    renderPage();
+  } catch (e) {
+    renderLogin(e.message);
+  }
+}
+
+async function load() {
+  const [statusRes, threadsRes] = await Promise.all([request('/status'), request('/threads')]);
+  state.status = statusRes.data;
+  state.threads = threadsRes.data;
+  if (!state.selected && state.threads.length) {
+    state.selected = state.threads[0];
+  } else if (state.selected) {
+    state.selected = state.threads.find(t => t.threadID === state.selected.threadID) || state.selected;
+  }
+}
+
+function logout() {
+  localStorage.removeItem('bot_dashboard_token');
+  renderLogin();
+}
+
+function renderPage() {
+  document.getElementById('root').innerHTML = `
+    <div class="wrap">
+      <!-- GLOWING HEADER -->
+      <div class="header">
+        <div class="header-brand">
+          <div class="header-logo" style="overflow: hidden; padding: 0;"><img src="${localStorage.getItem('bot_dashboard_server_url') || ''}/logo.jpg" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/logo.jpg'"></div>
+          <div class="header-title">
+            <h1>ADMIN BOT REMOTE</h1>
+            <span style="font-size: 11px; color: var(--text-muted);">DUA ADMIN • v4.5.0</span>
+          </div>
+        </div>
+        <div class="header-status">
+          <div class="status-dot" style="${!state.status.online ? 'background-color: var(--accent-red); box-shadow: 0 0 12px var(--accent-red);' : ''}"></div>
+          <span>${state.status.online ? 'BOT ONLINE' : 'BOT OFFLINE'}</span>
+          <button class="secondary" onclick="logout()" style="padding: 6px 12px; font-size: 11px; border-radius: 8px; margin-left: 12px;">Đăng xuất</button>
+        </div>
+      </div>
+
+      ${!state.status.online ? `
+      <!-- OFFLINE WARNING BANNER -->
+      <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(245, 158, 11, 0.08)); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 16px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; animation: pulse 2s infinite;">
+        <div style="width: 42px; height: 42px; background: rgba(239, 68, 68, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">🔴</div>
+        <div style="flex: 1; min-width: 200px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--accent-red); margin-bottom: 3px;">⚠️ Bot đang OFFLINE - AppState có thể đã hết hạn!</div>
+          <div style="font-size: 12px; color: var(--text-muted);">Hãy vào tab "Hệ thống & Logs" để đăng nhập lại tài khoản Facebook và khôi phục bot.</div>
+        </div>
+        <button onclick="switchTab('system')" style="background: linear-gradient(135deg, var(--accent-red), #dc2626); border: none; padding: 10px 20px; border-radius: 10px; color: white; font-weight: 600; cursor: pointer; font-size: 12px; white-space: nowrap; flex-shrink: 0;">🔑 ĐĂNG NHẬP LẠI</button>
+      </div>
+      ` : ''}
+
+      <!-- METRICS GRID -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Số nhóm chat</span>
+            <div class="metric-icon">👥</div>
+          </div>
+          <span class="metric-value">${state.threads.length}</span>
+        </div>
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Lệnh đã nạp</span>
+            <div class="metric-icon">⚡</div>
+          </div>
+          <span class="metric-value">${state.status.commands}</span>
+        </div>
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Bộ nhớ sử dụng</span>
+            <div class="metric-icon">💾</div>
+          </div>
+          <span class="metric-value" id="metric-memory">${state.status.memory}</span>
+        </div>
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Uptime</span>
+            <div class="metric-icon">⏳</div>
+          </div>
+          <span class="metric-value" id="metric-uptime" style="font-size: 20px; font-weight: 800; padding: 6px 0;">${state.status.uptime}</span>
+        </div>
+      </div>
+
+      <!-- MAIN APP CONTAINER -->
+      <div class="layout">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+          <button class="nav-btn ${state.activeTab === 'box' ? 'active' : ''}" onclick="switchTab('box')">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Quản lý Box
+          </button>
+          <button class="nav-btn ${state.activeTab === 'tinhdiem' ? 'active' : ''}" onclick="switchTab('tinhdiem')">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            Tính Điểm FF
+          </button>
+          <button class="nav-btn ${state.activeTab === 'user' ? 'active' : ''}" onclick="switchTab('user')">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            Quản lý lượt dùng
+          </button>
+          <button class="nav-btn ${state.activeTab === 'terminal' ? 'active' : ''}" onclick="switchTab('terminal')">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 12H5v-2h6v2zm8-4H5V8h14v4z"/></svg>
+            Console Lệnh từ xa
+          </button>
+          <button class="nav-btn ${state.activeTab === 'system' ? 'active' : ''}" onclick="switchTab('system')">
+            <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+            Hệ thống & Logs
+          </button>
+        </div>
+
+        <!-- Render Tab Panels -->
+        <div class="main-content">
+          ${renderActiveTab()}
+        </div>
+      </div>
+    </div>
+  `;
+  
+  if (state.activeTab === 'box') {
+    attachBoxListeners();
+  }
+}
+
+function switchTab(tab) {
+  state.activeTab = tab;
+  renderPage();
+  if (tab === 'system') {
+    fetchSystemLogs();
+  }
+  if (tab === 'tinhdiem') {
+    loadTdKeys();
+  }
+}
+
+function renderActiveTab() {
+  if (state.activeTab === 'box') {
+    const threadList = state.threads.map(t => {
+      const isSelected = state.selected && state.selected.threadID === t.threadID;
+      const isFree = t.vohanBox ? '<span class="badge free">Miễn phí</span>' : '';
+      let rentalBadge = '';
+      if (t.rental) {
+        if (t.rental.daysLeft === 'VOHAN') {
+          rentalBadge = '<span class="badge free" style="background: rgba(99, 102, 241, 0.15); color: var(--accent-indigo); border: 1px solid rgba(99, 102, 241, 0.25);">Vô hạn</span>';
+        } else if (t.rental.isExpired) {
+          rentalBadge = '<span class="badge" style="background: rgba(239, 68, 68, 0.15); color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.25);">Hết hạn</span>';
+        } else {
+          const isSoon = t.rental.daysLeft <= 3;
+          const bg = isSoon ? 'rgba(245, 158, 11, 0.15)' : 'rgba(6, 182, 212, 0.15)';
+          const color = isSoon ? 'var(--accent-amber)' : 'var(--accent-cyan)';
+          const border = isSoon ? 'rgba(245, 158, 11, 0.25)' : 'rgba(6, 182, 212, 0.25)';
+          rentalBadge = '<span class="badge" style="background: ' + bg + '; color: ' + color + '; border: 1px solid ' + border + ';">Còn ' + t.rental.daysLeft + ' ngày</span>';
+        }
+      }
+      return `
+        <div class="thread-item ${isSelected ? 'active' : ''}" onclick="selectThread('${t.threadID}')">
+          <div class="thread-name">${esc(t.name)}</div>
+          <div class="thread-meta">
+            <span>ID: ${t.threadID}</span>
+            <div style="display: flex; gap: 4px; align-items: center;">
+              ${isFree}
+              ${rentalBadge}
+              <span class="badge prefix">Prefix: ${esc(t.prefix)}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('') || '<p class="muted">Không tìm thấy box nào trong cơ sở dữ liệu.</p>';
+
+    const detailPanel = state.selected ? `
+      <div class="card-title">⚙️ Cấu hình: ${esc(state.selected.name)}</div>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom: 16px;">Thread ID: ${state.selected.threadID} • ${state.selected.participantCount} thành viên</p>
+      
+      <!-- Rental Info Banner -->
+      <div class="card" style="margin-top: -8px; margin-bottom: 20px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(6, 182, 212, 0.03)); border: 1px solid var(--border-glass);">
+        <div class="rental-banner-content">
+          <div>
+            <div class="metric-title" style="margin-bottom: 4px; color: var(--accent-indigo); font-weight: bold; letter-spacing: 0.5px;">🔑 HẠN SỬ DỤNG BOT</div>
+            <div style="font-size: 13px; display: flex; align-items: center; gap: 8px; font-weight: 500;">
+              <span>Gói cước: <strong style="color: white; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 6px; font-size: 11px;">${state.selected.rental ? state.selected.rental.plan.toUpperCase() : 'Chưa thuê'}</strong></span>
+              ${state.selected.rental ? `
+                <span style="color: var(--text-muted);">•</span>
+                <span>Bắt đầu: <strong style="color: var(--text-main); font-size: 12px;">${state.selected.rental.time_start || 'N/A'}</strong></span>
+              ` : ''}
+            </div>
+          </div>
+          
+          <div class="rental-banner-status">
+            ${!state.selected.rental ? `
+              <div style="color: var(--accent-red); font-weight: 700; font-size: 15px;">Chưa thuê bot ❌</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Hãy liên hệ Admin để thuê</div>
+            ` : state.selected.rental.daysLeft === 'VOHAN' ? `
+              <div style="color: var(--accent-green); font-weight: 700; font-size: 15px; text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);">Vô hạn thời gian ✅</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Hạn: Không giới hạn</div>
+            ` : state.selected.rental.isExpired ? `
+              <div style="color: var(--accent-red); font-weight: 700; font-size: 15px;">Đã hết hạn ❌</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Hạn dùng: ${esc(state.selected.rental.time_end)}</div>
+            ` : `
+              <div style="color: ${state.selected.rental.daysLeft <= 3 ? 'var(--accent-amber)' : 'var(--accent-cyan)'}; font-weight: 700; font-size: 15px; text-shadow: 0 0 10px ${state.selected.rental.daysLeft <= 3 ? 'rgba(245, 158, 11, 0.3)' : 'rgba(6, 182, 212, 0.3)'};">Còn ${state.selected.rental.daysLeft} ngày ✅</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Hạn dùng: ${esc(state.selected.rental.time_end)}</div>
+            `}
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="row-item">
+          <label class="metric-title" style="margin-bottom:6px; display:block;">Prefix của Box</label>
+          <div style="display: flex; gap: 10px;">
+            <input id="prefix-input" class="input" value="${esc(state.selected.prefix)}">
+            <button onclick="savePrefix()">Lưu</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Send Message Section -->
+      <div class="card" style="margin-top: 20px; border: 1px solid rgba(6,182,212,0.25); background: rgba(6,182,212,0.02);">
+        <div class="metric-title" style="margin-bottom: 8px; color: var(--accent-cyan); font-weight: bold; letter-spacing: 0.5px;">💬 GỬI TIN NHẮN NHANH ĐẾN BOX</div>
+        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Nhập nội dung tin nhắn và bot sẽ gửi trực tiếp vào box chat này ngay lập tức.</p>
+        <div style="display: flex; gap: 10px;">
+          <input id="quick-msg-input" class="input" placeholder="Nhập tin nhắn cần gửi..." style="flex: 1;">
+          <button onclick="sendQuickMessage()" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));">Gửi Tin</button>
+        </div>
+      </div>
+
+      <!-- Quick Toggles -->
+      <div class="card" style="margin-top: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <div class="metric-title" style="margin-bottom: 0;">BẬT / TẮT NHANH TÍNH NĂNG</div>
+          <div style="display: flex; gap: 8px;">
+            <button class="secondary" onclick="refreshAntiStatus()" style="padding: 6px 14px; font-size: 11px; border-radius: 8px;">🔄 Cập nhật trạng thái</button>
+            <button class="secondary" onclick="syncAntiStatus()" style="padding: 6px 14px; font-size: 11px; border-radius: 8px; border-color: rgba(6,182,212,0.3); color: var(--accent-cyan);">⚡ Đồng bộ Anti</button>
+          </div>
+        </div>
+        <div class="switches-grid">
+          ${controls.map(k => {
+            const isChecked = state.selected.data?.[k] ? 'checked' : '';
+            const label = controlLabels[k] || k;
+            return `
+              <div class="switch-control">
+                <span>${label}</span>
+                <label class="switch">
+                  <input type="checkbox" data-setting="${k}" ${isChecked}>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Free Box Section -->
+      <div class="card vohan-box" style="margin-top: 20px;">
+        <div class="metric-title" style="margin-bottom: 8px; color: var(--accent-cyan);">🎁 KÍCH HOẠT BOX MIỄN PHÍ (VOHANBOX)</div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom: 16px;">
+          Bỏ qua kiểm tra lượt dùng TD khi thực hiện lệnh trong box chat này.
+        </p>
+        
+        ${state.selected.vohanBox ? `
+          <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 12px; border-radius: 12px; margin-bottom: 14px;">
+            <span style="font-size: 13px; color: var(--accent-green); font-weight: 600; display: block;">Box đang được miễn phí!</span>
+            <span style="font-size: 11px; color: var(--text-muted);">Đối tượng: ${state.selected.vohanBox.scope} • Hết hạn vào: ${moment(state.selected.vohanBox.expiry).format("HH:mm:ss DD/MM/YYYY")}</span>
+          </div>
+        ` : ''}
+
+        <div class="row">
+          <div class="row-item">
+            <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display:block;">Đối tượng áp dụng</label>
+            <select id="vohanbox-scope" class="select">
+              <option value="all">Tất cả thành viên trong nhóm</option>
+              <option value="admin">Chỉ quản trị viên của nhóm (QTV)</option>
+            </select>
+          </div>
+          <div class="row-item">
+            <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display:block;">Thời gian áp dụng</label>
+            <select id="vohanbox-days" class="select">
+              <option value="7">7 Ngày miễn phí</option>
+              <option value="30" selected>30 Ngày miễn phí</option>
+              <option value="90">90 Ngày miễn phí</option>
+              <option value="365">1 Năm miễn phí</option>
+              <option value="0">TẮT MIỄN PHÍ</option>
+            </select>
+          </div>
+        </div>
+        <button onclick="saveVohanBox()" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));">KÍCH HOẠT BOX</button>
+      </div>
+
+      <div style="font-size: 12px; color: var(--text-muted); padding: 10px; border-radius: 10px; background: rgba(0,0,0,0.15); font-family: monospace;">
+        ${state.log}
+      </div>
+    ` : '<p class="muted">Vui lòng chọn một nhóm từ danh sách bên trái.</p>';
+
+    return `
+      <div class="panel-grid">
+        <div class="card" style="padding: 16px;">
+          <input id="search" class="input" placeholder="Tìm tên box hoặc ID..." oninput="filterThreads()" style="margin-bottom: 12px;">
+          <div class="list-wrapper" id="thread-list-container">
+            ${threadList}
+          </div>
+        </div>
+        <div class="card" style="padding: 20px;">
+          <div id="detail-panel-container">
+            ${detailPanel}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (state.activeTab === 'user') {
+    const userDetail = state.userSearchData ? `
+      <div class="card" style="background: rgba(255,255,255,0.02); margin-top: 16px;">
+        <div class="card-title">🔍 Kết quả: ${esc(state.userSearchData.name)}</div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">UID: ${state.userSearchData.uid}</p>
+        
+        <div class="grid-2col-tablet" style="margin-bottom: 20px;">
+          <div class="metric-card" style="background: rgba(0,0,0,0.25);">
+            <span class="metric-title">Lượt dùng hiện tại</span>
+            <span class="metric-value" style="color: var(--accent-cyan);">${state.userSearchData.turns.toLocaleString()}</span>
+          </div>
+          <div class="metric-card" style="background: rgba(0,0,0,0.25);">
+            <span class="metric-title">Trạng thái Vô hạn</span>
+            <span class="metric-value" style="color: ${state.userSearchData.isVohan ? 'var(--accent-green)' : 'var(--text-muted)'}; font-size: 20px;">
+              ${state.userSearchData.isVohan ? 'ĐANG KÍCH HOẠT' : 'KHÔNG BẬT'}
+            </span>
+            ${state.userSearchData.vohanExpiry ? `
+              <span style="font-size: 10px; color: var(--text-muted);">Hạn: ${moment(state.userSearchData.vohanExpiry).format("DD/MM/YYYY")}</span>
+            ` : ''}
+          </div>
+        </div>
+
+        <div class="grid-2col-responsive">
+          <!-- Nap Luot Section -->
+          <div class="card" style="border: 1px solid rgba(99,102,241,0.15);">
+            <div class="metric-title" style="color: var(--accent-indigo); margin-bottom: 12px;">💳 NẠP LƯỢT CHO THÀNH VIÊN</div>
+            <div style="display:flex; gap: 8px;">
+              <input id="nap-turns-amount" class="input" type="number" value="100" placeholder="Số lượt nạp">
+              <button onclick="naptiengUser()">Nạp Lượt</button>
+            </div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">Giá trị có thể là âm (-) để trừ lượt dùng của user.</p>
+          </div>
+
+          <!-- Set Vo Han Section -->
+          <div class="card" style="border: 1px solid rgba(6,182,212,0.15);">
+            <div class="metric-title" style="color: var(--accent-cyan); margin-bottom: 12px;">♾️ CẤP QUYỀN VÔ HẠN (VÔ HẠN CÁ NHÂN)</div>
+            <div style="display:flex; gap: 8px;">
+              <select id="vohan-days-amount" class="select">
+                <option value="7">7 Ngày</option>
+                <option value="30" selected>30 Ngày</option>
+                <option value="90">90 Ngày</option>
+                <option value="365">1 Năm</option>
+                <option value="0">TẮT VÔ HẠN</option>
+              </select>
+              <button onclick="capVohanUser()" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));">Cấp Vô Hạn</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    ` : '<div class="muted" style="text-align:center; padding: 40px 0;">Nhập UID người dùng ở trên để tra cứu thông tin lượt dùng & điều chỉnh giấy phép.</div>';
+
+    return `
+      <div class="card-title">👤 Quản lý Lượt Dùng & Gói Cước Người Dùng</div>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom: 20px;">Tìm kiếm bằng UID hoặc dán link Facebook để tra cứu thông tin lượt dùng & điều chỉnh giấy phép.</p>
+      
+      <div class="search-container">
+        <input id="user-search-uid" class="input" placeholder="Nhập UID hoặc dán link Facebook (vd: facebook.com/username)..." onkeydown="if(event.key==='Enter')searchUser()">
+        <button onclick="searchUser()">TRA CỨU</button>
+      </div>
+      <p style="font-size: 11px; color: var(--text-muted); margin-top: -12px; margin-bottom: 14px;">💡 Hỗ trợ: UID số, link facebook.com/profile.php?id=XXX, facebook.com/username, mbasic.facebook.com/...</p>
+
+      <div style="font-size: 12px; color: var(--text-muted); padding: 10px; border-radius: 10px; background: rgba(0,0,0,0.15); font-family: monospace; margin-bottom: 16px;">
+        ${state.log}
+      </div>
+
+      <div id="user-detail-container">
+        ${userDetail}
+      </div>
+    `;
+  }
+
+  if (state.activeTab === 'terminal') {
+    const threadSelector = state.threads.length ? `
+      <select id="console-thread-id" class="select" style="margin-bottom: 12px;">
+        ${state.threads.map(t => `<option value="${t.threadID}">${esc(t.name)} (${t.threadID})</option>`).join('')}
+      </select>
+    ` : '<p class="muted">Không có nhóm chat.</p>';
+
+    const logHistory = state.terminalLogs.map(l => `
+      <div style="margin-bottom: 6px;">
+        <span style="color: var(--accent-cyan);">[Console @ ${l.time}]</span> ${esc(l.text)}
+      </div>
+    `).join('') || 'Chưa thực hiện lệnh nào trên giao diện từ xa.';
+
+    return `
+      <div class="card-title">💬 Bảng lệnh tương tác từ xa (Console)</div>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">
+        Gửi lệnh hoặc tin nhắn văn bản giả lập đến bất kỳ box chat nào mà bot đang hoạt động.
+      </p>
+
+      <div class="row">
+        <div class="row-item" style="max-width: 320px;">
+          <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display: block;">Chọn nhóm đích:</label>
+          ${threadSelector}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-item">
+          <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display: block;">Nội dung tin nhắn / lệnh:</label>
+          <input id="console-message" class="input" placeholder="Nhập tin nhắn thông thường hoặc lệnh bot (ví dụ: .menu, .tinhdiem,...)" onkeydown="if(event.key==='Enter')sendConsoleMessage()">
+        </div>
+      </div>
+
+      <button onclick="sendConsoleMessage()" style="margin-bottom: 24px;">GỬI LỆNH ĐẾN BOX</button>
+
+      <div class="card-title" style="font-size: 15px; margin-bottom: 8px;">🖥️ Lịch sử thao tác</div>
+      <div class="log-panel" id="console-terminal">
+        ${logHistory}
+      </div>
+    `;
+  }
+
+  if (state.activeTab === 'tinhdiem') {
+    const timeSlots = [
+      { id: 1, label: '1️⃣  13h - 15h' },
+      { id: 2, label: '2️⃣  15h - 17h' },
+      { id: 3, label: '3️⃣  18h - 20h' },
+      { id: 4, label: '4️⃣  20h - 21h50' },
+      { id: 5, label: '5️⃣  21h40 - 23h40' },
+      { id: 6, label: '6️⃣  23h - 01h' },
+      { id: 7, label: '7️⃣  01h - 03h' },
+      { id: 8, label: '8️⃣  10h - 12h' },
+    ];
+    const selectedKey = state.tdKey || (state.tdKeys.length ? state.tdKeys[0].key : 'EMDUA');
+    const keyOptions = state.tdKeys.length
+      ? state.tdKeys.map((k, i) => `<option value="${esc(k.key)}"${k.key === selectedKey ? ' selected' : ''}>${esc(k.label)}</option>`).join('')
+      : '<option value="EMDUA">Bảng 19</option>';
+    const activeKeyConf = state.tdKeys.find(k => k.key === selectedKey) || (state.tdKeys.length ? state.tdKeys[0] : null);
+    const firstLayoutId = activeKeyConf ? activeKeyConf.idbang : '19';
+    const firstLabel = activeKeyConf ? activeKeyConf.label : '';
+
+    const resultBlock = state.tdLoading ? `
+      <div style="text-align:center; padding: 40px; color: var(--accent-cyan);">
+        <div style="font-size: 32px; animation: spin 1s linear infinite; display:inline-block;">⏳</div>
+        <p style="margin-top: 16px; font-size: 14px; font-weight: 600;">Đang tính điểm, vui lòng chờ...</p>
+      </div>
+    ` : state.tdResult ? (state.tdResult.success ? `
+      <div style="margin-top: 24px;">
+        <div style="background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(6,182,212,0.04)); border: 1px solid rgba(16,185,129,0.25); border-radius: 18px; padding: 20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+            <div>
+              <div style="font-family:'Outfit',sans-serif; font-size:16px; font-weight:700; color: var(--accent-green); margin-bottom:4px;">✅ Tính điểm thành công!</div>
+              <div style="font-size:12px; color:var(--text-muted);">ID: ${esc(state.tdResult.info?.accountId)} • Khung giờ: ${esc(state.tdResult.info?.timeRange)} • Key: ${esc(state.tdResult.info?.key)}</div>
+              <div style="font-size:12px; color:var(--text-muted);">Số trận: <strong style="color:white;">${state.tdResult.info?.matchCount || 0}</strong></div>
+            </div>
+            <button onclick="clearTdResult()" class="secondary" style="padding:6px 14px; font-size:11px; border-radius:8px;">🗑️ Xóa kết quả</button>
+          </div>
+          <div style="margin-top: 12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:10px; flex-wrap:wrap;">
+              <div style="font-size:12px; color: var(--text-muted);">Ảnh bảng điểm (PNG)</div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button onclick="saveTdImage()" class="secondary" style="padding:6px 14px; font-size:11px; border-radius:8px;">💾 Tải ảnh Full HD</button>
+                <button onclick="shareTdImage()" class="secondary" style="padding:6px 14px; font-size:11px; border-radius:8px;">🔗 Chia sẻ ảnh</button>
+              </div>
+            </div>
+            <img id="td-result-img" src="${esc(state.tdResult.imageUrl)}" style="width:100%; border-radius:14px; border:1px solid var(--border-glass); display:block;" alt="Bảng điểm">
+          </div>
+        </div>
+      </div>
+    ` : `
+      <div style="margin-top: 24px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); border-radius: 14px; padding: 16px; color: var(--accent-red); font-weight:600; font-size:14px;">
+        ❌ Lỗi: ${esc(state.tdResult.message)}
+      </div>
+    `) : '';
+
+    return `
+      <style>
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .board-preview-wrap { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--border-glass); background: rgba(0,0,0,0.4); min-height: 120px; display:flex; align-items:center; justify-content:center; margin-top: 10px; }
+        .board-preview-wrap img { width:100%; display:block; border-radius:14px; }
+        .board-preview-label { position:absolute; bottom:0; left:0; right:0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 10px 12px; font-size:12px; font-weight:700; color:white; font-family:'Outfit',sans-serif; }
+        .board-preview-empty { color:var(--text-muted); font-size:12px; }
+      </style>
+      <div class="card-title">🎮 Tính Điểm Free Fire</div>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom: 20px;">Nhập ID Garena, chọn khung giờ và bảng để tính điểm bảng xếp hạng.</p>
+
+      <div class="card" style="border: 1px solid rgba(99,102,241,0.2); background: rgba(99,102,241,0.03);">
+        <div class="metric-title" style="margin-bottom: 14px; color: var(--accent-indigo);">📝 NHẬP THÔNG TIN</div>
+
+        <div class="row">
+          <div class="row-item">
+            <label style="font-size:11px; color:var(--text-muted); margin-bottom:4px; display:block;">ID Garena (bắt buộc)</label>
+            <input id="td-account-id" class="input" placeholder="Nhập ID Garena tại đây..." type="text" value="${esc(state.tdAccountId)}" oninput="state.tdAccountId = this.value">
+          </div>
+          <div class="row-item">
+            <label style="font-size:11px; color:var(--text-muted); margin-bottom:4px; display:block;">Chọn Ngày tính điểm</label>
+            <input id="td-date" class="input" type="date" value="${state.tdDate}" oninput="state.tdDate = this.value">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="row-item">
+            <label style="font-size:11px; color:var(--text-muted); margin-bottom:4px; display:block;">Chọn Bảng</label>
+            <select id="td-key" class="select" onchange="updateBoardPreview(this.value)">
+              ${keyOptions}
+            </select>
+            <div class="board-preview-wrap" id="board-preview-box">
+              ${firstLayoutId
+                ? `<img id="board-preview-img" src="/api/tinhdiem/layout-preview/${esc(firstLayoutId)}?token=${encodeURIComponent(localStorage.getItem('bot_dashboard_token') || '')}" onerror="this.style.display='none';document.getElementById('board-preview-empty').style.display='block'" alt="Ảnh bảng"><div class="board-preview-label" id="board-preview-name">${esc(firstLabel)}</div><span id="board-preview-empty" class="board-preview-empty" style="display:none;">Không có ảnh xem trước</span>`
+                : `<span class="board-preview-empty">Chưa tải bảng</span>`
+              }
+            </div>
+          </div>
+          <div class="row-item">
+            <label style="font-size:11px; color:var(--text-muted); margin-bottom:4px; display:block;">Chọn Khung Giờ</label>
+            <select id="td-slot" class="select" onchange="state.tdSlotId = parseInt(this.value)">
+              ${timeSlots.map(s => `<option value="${s.id}"${s.id === state.tdSlotId ? ' selected' : ''}>${s.label}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="row-item" style="display:flex; align-items:flex-end;">
+            <button onclick="runTinhDiem()" style="width:100%; justify-content:center; background: linear-gradient(135deg, #8b5cf6, #6366f1); font-size:15px; padding:13px;" ${state.tdLoading ? 'disabled' : ''}>
+              ${state.tdLoading ? '⏳ Đang tính...' : '🎯 TÍNH ĐIỂM'}
+            </button>
+          </div>
+        </div>
+
+        <p style="font-size:11px; color:var(--text-muted); margin-top: 8px;">
+          💡 Hệ thống sẽ lấy dữ liệu từ Garena API và tạo ảnh bảng xếp hạng theo khung giờ đã chọn.
+        </p>
+      </div>
+
+      ${resultBlock}
+    `;
+  }
+
+  if (state.activeTab === 'system') {
+    return `
+      <div class="card-title">⚙️ Thông tin hệ thống & Nhật ký hoạt động</div>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom: 20px;">Theo dõi các thông số hệ thống, nhật ký hoạt động thời gian thực của bot và thực hiện restart khi cần.</p>
+      
+      <div class="grid-3col-responsive" style="margin-bottom: 20px;">
+        <div class="metric-card" style="background: rgba(0,0,0,0.25);">
+          <span class="metric-title">Hệ điều hành</span>
+          <span class="metric-value" style="font-size: 20px; text-transform: uppercase;">${state.status.platform}</span>
+        </div>
+        <div class="metric-card" style="background: rgba(0,0,0,0.25);">
+          <span class="metric-title">Phiên bản Bot</span>
+          <span class="metric-value" style="font-size: 20px;">DUA v4.5.0</span>
+        </div>
+        <div class="metric-card" style="background: rgba(0,0,0,0.25);">
+          <span class="metric-title">Events Loaded</span>
+          <span class="metric-value" style="font-size: 20px;">${state.status.events || 0} Events</span>
+        </div>
+      </div>
+
+      <div class="card-title" style="font-size: 15px; margin-bottom: 8px;">📄 Debug & Log nhật ký (anti_debug.txt)</div>
+      <div class="log-panel" id="system-terminal" style="max-height: 250px; font-size: 12px; color: #a5f3fc; margin-bottom: 24px;">
+        Đang tải nhật ký hệ thống...
+      </div>
+
+      <!-- Facebook Login Recovery Card -->
+      <div class="card" id="fb-login-card" style="border: 1px solid rgba(99, 102, 241, 0.3); background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(6, 182, 212, 0.04)); padding: 20px; margin-bottom: 20px;">
+        <div class="card-title" style="color: var(--accent-indigo); margin-bottom: 6px;">
+          <span style="margin-right: 8px;">🔑</span> Đăng nhập lại tài khoản Bot (Khôi phục AppState)
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+          Khi AppState hết hạn hoặc bị lỗi, chọn phương thức khôi phục bên dưới. Khuyên dùng trình duyệt ảo hoặc dán Cookie trực tiếp.
+        </p>
+        ${!state.status.online ? '<div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;"><span style="font-size: 18px;">⚠️</span><span style="font-size: 13px; color: var(--accent-red); font-weight: 600;">Bot đang OFFLINE! AppState có thể đã hết hạn. Hãy cập nhật lại để khôi phục.</span></div>' : '<div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;"><span style="font-size: 18px;">✅</span><span style="font-size: 13px; color: var(--accent-green); font-weight: 500;">Bot đang hoạt động bình thường. Chỉ sử dụng khi cần đổi tài khoản hoặc refresh appstate.</span></div>'}
+        
+        <!-- Tab selector -->
+        <div style="display: flex; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+          <button id="tab-recovery-cookie" onclick="switchRecoveryTab('cookie')" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); padding: 6px 12px; border-radius: 6px; color: white; font-size: 11px; cursor: pointer; font-weight: 600; outline: none;">DÁN COOKIE / APPSTATE (DỄ DÙNG)</button>
+          <button id="tab-recovery-virtual" onclick="switchRecoveryTab('virtual')" style="background: transparent; border: 1px solid transparent; padding: 6px 12px; border-radius: 6px; color: var(--text-muted); font-size: 11px; cursor: pointer; font-weight: 500; outline: none;">🌐 TRÌNH DUYỆT FB ẢO (MỚI - KHÔNG CHẶN)</button>
+          <button id="tab-recovery-login" onclick="switchRecoveryTab('login')" style="background: transparent; border: 1px solid transparent; padding: 6px 12px; border-radius: 6px; color: var(--text-muted); font-size: 11px; cursor: pointer; font-weight: 500; outline: none;">ĐĂNG NHẬP EMAIL & MẬT KHẨU</button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- Section 1: Cookie/AppState (default) -->
+          <div id="recovery-cookie-sec" style="display: block;">
+            <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block;">📋 Dán AppState JSON hoặc Chuỗi Cookie Facebook</label>
+            <textarea id="fb-appstate-data" class="input" style="width: 100%; min-height: 100px; font-family: monospace; font-size: 11px; resize: vertical; padding: 10px;" placeholder='[{"key":"c_user","value":"..."}, ...]\nHoặc dán chuỗi cookie thô: c_user=...; xs=...;'></textarea>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+              💡 <strong>Cách lấy Cookie:</strong> Đăng nhập facebook.com trên trình duyệt máy tính (hoặc Kiwi Browser điện thoại) &rarr; dùng extension <em>J2TEAM Security</em> hoặc <em>c3c-fbstate</em> để xuất AppState, hoặc nhấn F12 &rarr; Application &rarr; Cookies &rarr; copy chuỗi cookie thô dán vào đây.
+            </p>
+          </div>
+
+          <!-- Section 2: Virtual Browser (hidden by default) -->
+          <div id="recovery-virtual-sec" style="display: none; flex-direction: column; gap: 12px;">
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; line-height: 1.4;">
+              💡 <strong>Trình duyệt ảo:</strong> Hệ thống sẽ mở một trình duyệt ẩn danh chạy ngầm. Bạn có thể tương tác trực tiếp với giao diện Facebook bên dưới bằng cách click chuột và gõ phím để đăng nhập. Sau khi đăng nhập thành công, bot sẽ tự lấy AppState.
+            </p>
+            
+            <!-- Gemini API Key Input -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 4px;">
+              <div style="flex: 1; min-width: 200px;">
+                <div style="font-size: 12px; font-weight: 600; color: white; margin-bottom: 2px;">🔑 Cấu hình Gemini API Key (Bắt buộc để giải Captcha)</div>
+                <div style="font-size: 10px; color: var(--text-muted);">Dùng để tự động giải Captcha hình/chữ. Lấy key miễn phí tại <a href="https://aistudio.google.com/" target="_blank" style="color: var(--accent-cyan); text-decoration: none;">Google AI Studio</a>.</div>
+              </div>
+              <input id="gemini-key-input" class="input" type="password" placeholder="Dán API Key của bạn (bắt đầu bằng AIzaSy...)" style="max-width: 320px; font-size: 11px;" onchange="saveGeminiKey()" value="${localStorage.getItem('gemini_api_key') || ''}">
+            </div>
+
+            <div id="vb-setup-container" style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button onclick="startVirtualBrowser()" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border: none; padding: 10px 20px; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">🌐 KHỞI CHẠY TRÌNH DUYỆT ẢO</button>
+            </div>
+            <div id="vb-active-container" style="display: none; flex-direction: column; gap: 10px;">
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                <input id="vb-input-text" class="input" style="flex: 1; min-width: 150px; font-size: 12px;" placeholder="Nhập chữ muốn gõ vào đây..." onkeydown="if(event.key==='Enter')sendVbType()">
+                <button onclick="sendVbType()" style="padding: 8px 16px; font-size: 12px; background: var(--accent-cyan); color: #000; font-weight: 600;">⌨️ GỬI VĂN BẢN</button>
+                <button onclick="sendVbKey('Enter')" class="secondary" style="padding: 8px 12px; font-size: 12px;">⏎ ENTER</button>
+                <button onclick="sendVbKey('Backspace')" class="secondary" style="padding: 8px 12px; font-size: 12px;">⌫ BACKSPACE</button>
+                <button onclick="sendVbKey('Tab')" class="secondary" style="padding: 8px 12px; font-size: 12px;">⇥ TAB</button>
+                <button onclick="solveVbCaptcha()" style="padding: 8px 16px; font-size: 12px; background: linear-gradient(135deg, #10B981, #059669); color: white; font-weight: 600; border: none; border-radius: 8px; cursor: pointer;">⚡ TỰ ĐỘNG GIẢI CAPTCHA</button>
+                <button onclick="stopVirtualBrowser()" class="danger" style="padding: 8px 16px; font-size: 12px;">🛑 ĐÓNG</button>
+              </div>
+              <div style="position: relative; max-width: 640px; margin: 10px auto; border: 2px solid var(--border-glass); border-radius: 12px; overflow: hidden; background: #000;">
+                <img id="vb-screen-img" src="" onclick="handleVbClick(event)" style="width: 100%; display: block; cursor: crosshair;" alt="Màn hình Facebook ảo">
+                <div id="vb-loading-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 600;">
+                  ⏳ Đang tải màn hình...
+                </div>
+              </div>
+              <p style="font-size: 10px; color: var(--text-muted); text-align: center;">
+                👉 Click vào ảnh để click chuột ảo | Nhập chữ ở trên &rarr; nhấn "Gửi văn bản" để gõ chữ.
+              </p>
+            </div>
+          </div>
+
+          <!-- Section 3: Email & Password (hidden) -->
+          <div id="recovery-login-sec" style="display: none; flex-direction: column; gap: 12px;">
+            <div class="row" style="gap: 12px;">
+              <div class="row-item" style="flex: 1;">
+                <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block;">📧 Email / Số điện thoại</label>
+                <input id="fb-email" class="input" type="text" placeholder="Nhập email hoặc SĐT tài khoản bot" autocomplete="username">
+              </div>
+              <div class="row-item" style="flex: 1;">
+                <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block;">🔒 Mật khẩu</label>
+                <input id="fb-password" class="input" type="password" placeholder="Nhập mật khẩu" autocomplete="current-password">
+              </div>
+            </div>
+            <div id="fb-2fa-row" style="display: none;">
+              <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block;">🛡️ Mã xác thực 2FA (nếu có)</label>
+              <input id="fb-2fa-code" class="input" type="text" placeholder="Nhập mã 2FA 6 số" maxlength="6" style="max-width: 280px;" autocomplete="one-time-code">
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px;">
+            <button id="fb-login-btn" onclick="submitFbLogin()" style="background: linear-gradient(135deg, var(--accent-indigo), var(--accent-blue)); border: none; padding: 10px 24px; border-radius: 10px; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              <span id="fb-btn-text">KHÔI PHỤC APPSTATE</span>
+            </button>
+            <span id="fb-login-status" style="font-size: 12px; color: var(--text-muted);"></span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card" style="border: 1px solid rgba(239, 68, 68, 0.25); background: rgba(239, 68, 68, 0.02); padding: 20px;">
+        <div class="card-title" style="color: var(--accent-red); margin-bottom: 6px;">🚨 VÙNG NGUY HIỂM (ADMIN ONLY)</div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+          Khởi động lại toàn bộ tiến trình bot. Bot sẽ tự động tải lại các module lệnh, file cấu hình và kết nối Facebook.
+          Thao tác này mất từ 5-10 giây để hoàn tất.
+        </p>
+        <button class="danger" onclick="triggerRestartBot()">KHỞI ĐỘNG LẠI BOT (RESTART)</button>
+      </div>
+    `;
+  }
+}
+
+// Attach change event listeners to switches
+function attachBoxListeners() {
+  document.querySelectorAll('[data-setting]').forEach(node => {
+    node.onchange = () => toggleSetting(node.dataset.setting, node.checked);
+  });
+}
+
+function selectThread(id) {
+  state.selected = state.threads.find(t => t.threadID === id);
+  state.log = 'Đã chọn box ID ' + id;
+  renderPage();
+}
+
+function filterThreads() {
+  const query = document.getElementById('search').value.toLowerCase();
+  const filtered = state.threads.filter(t => (t.name + ' ' + t.threadID).toLowerCase().includes(query));
+  
+  document.getElementById('thread-list-container').innerHTML = filtered.map(t => {
+    const isSelected = state.selected && state.selected.threadID === t.threadID;
+    const isFree = t.vohanBox ? '<span class="badge free">Miễn phí</span>' : '';
+    let rentalBadge = '';
+    if (t.rental) {
+      if (t.rental.daysLeft === 'VOHAN') {
+        rentalBadge = '<span class="badge free" style="background: rgba(99, 102, 241, 0.15); color: var(--accent-indigo); border: 1px solid rgba(99, 102, 241, 0.25);">Vô hạn</span>';
+      } else if (t.rental.isExpired) {
+        rentalBadge = '<span class="badge" style="background: rgba(239, 68, 68, 0.15); color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.25);">Hết hạn</span>';
+      } else {
+        const isSoon = t.rental.daysLeft <= 3;
+        const bg = isSoon ? 'rgba(245, 158, 11, 0.15)' : 'rgba(6, 182, 212, 0.15)';
+        const color = isSoon ? 'var(--accent-amber)' : 'var(--accent-cyan)';
+        const border = isSoon ? 'rgba(245, 158, 11, 0.25)' : 'rgba(6, 182, 212, 0.25)';
+        rentalBadge = '<span class="badge" style="background: ' + bg + '; color: ' + color + '; border: 1px solid ' + border + ';">Còn ' + t.rental.daysLeft + ' ngày</span>';
+      }
+    }
+    return `
+      <div class="thread-item ${isSelected ? 'active' : ''}" onclick="selectThread('${t.threadID}')">
+        <div class="thread-name">${esc(t.name)}</div>
+        <div class="thread-meta">
+          <span>ID: ${t.threadID}</span>
+          <div style="display: flex; gap: 4px; align-items: center;">
+            ${isFree}
+            ${rentalBadge}
+            <span class="badge prefix">Prefix: ${esc(t.prefix)}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('') || '<p class="muted">Không tìm thấy kết quả.</p>';
+}
+
+async function savePrefix() {
+  const newPrefix = document.getElementById('prefix-input').value.trim();
+  if (!newPrefix) return;
+  state.log = 'Đang lưu prefix...';
+  renderPage();
+  try {
+    await request('/threads/' + state.selected.threadID, {
+      method: 'PATCH',
+      body: JSON.stringify({ data: { PREFIX: newPrefix } })
+    });
+    state.selected.prefix = newPrefix;
+    state.log = 'Đã cập nhật prefix của box thành "' + newPrefix + '"';
+    await load();
+    renderPage();
+  } catch (e) {
+    state.log = 'Lỗi lưu prefix: ' + e.message;
+    renderPage();
+  }
+}
+
+async function toggleSetting(k, v) {
+  state.log = 'Đang cập nhật ' + k + ' = ' + v + '...';
+  try {
+    await request('/threads/' + state.selected.threadID, {
+      method: 'PATCH',
+      body: JSON.stringify({ data: { [k]: v } })
+    });
+    state.selected.data = { ...(state.selected.data || {}), [k]: v };
+    state.log = 'Đã cập nhật ' + k + ' thành ' + (v ? 'BẬT' : 'TẮT');
+  } catch (e) {
+    state.log = 'Lỗi cập nhật: ' + e.message;
+    renderPage();
+  }
+}
+
+async function saveVohanBox() {
+  const scope = document.getElementById('vohanbox-scope').value;
+  const days = parseInt(document.getElementById('vohanbox-days').value);
+  state.log = 'Đang gửi cấu hình Vohanbox...';
+  renderPage();
+  try {
+    const res = await request('/threads/' + state.selected.threadID + '/vohanbox', {
+      method: 'POST',
+      body: JSON.stringify({ days, scope })
+    });
+    state.log = res.message;
+    await load();
+    renderPage();
+  } catch (e) {
+    state.log = 'Lỗi cấu hình Vohanbox: ' + e.message;
+    renderPage();
+  }
+}
+
+async function sendQuickMessage() {
+  const input = document.getElementById('quick-msg-input');
+  if (!input) return;
+  const msg = input.value.trim();
+  if (!msg) return;
+  state.log = 'Đang gửi tin nhắn...';
+  renderPage();
+  try {
+    const res = await request('/threads/' + state.selected.threadID + '/send', {
+      method: 'POST',
+      body: JSON.stringify({ message: msg })
+    });
+    state.log = res.message;
+    input.value = '';
+    renderPage();
+  } catch (e) {
+    state.log = 'Lỗi gửi tin nhắn: ' + e.message;
+    renderPage();
+  }
+}
+
+function extractUidFromFbUrl(input) {
+  // Already a numeric UID
+  if (/^\d{5,}$/.test(input)) return { uid: input };
+  
+  try {
+    let url;
+    if (input.includes('facebook.com') || input.includes('fb.com')) {
+      if (!input.startsWith('http')) input = 'https://' + input;
+      url = new URL(input);
+      
+      // profile.php?id=XXXXX
+      const idParam = url.searchParams.get('id');
+      if (idParam && /^\d+$/.test(idParam)) return { uid: idParam };
+      
+      // /people/Name/XXXXX or path with numeric ID
+      const pathParts = url.pathname.split('/').filter(Boolean);
+      if (pathParts[0] === 'people' && pathParts.length >= 3 && /^\d+$/.test(pathParts[2])) {
+        return { uid: pathParts[2] };
+      }
+      
+      // /XXXXX (numeric path)
+      const lastPart = pathParts[pathParts.length - 1];
+      if (lastPart && /^\d{5,}$/.test(lastPart)) return { uid: lastPart };
+      
+      // otherwise, need server to resolve the URL
+      return { url: input };
+    }
+  } catch (e) {}
+  
+  // If not a numeric UID and not a statically-parsed URL, it's a plain username/link that needs server-side resolution
+  return { username: input };
+}
+
+async function searchUser() {
+  const rawInput = document.getElementById('user-search-uid').value.trim();
+  if (!rawInput) return;
+  
+  let uid = rawInput;
+  const parsed = extractUidFromFbUrl(rawInput);
+  
+  if (parsed.username || parsed.url) {
+    const targetInput = parsed.url || parsed.username;
+    state.log = '🔍 Đang phân giải link/username Facebook: ' + targetInput + '...';
+    renderPage();
+    try {
+      const resolveRes = await request('/resolve-fb', {
+        method: 'POST',
+        body: JSON.stringify({ input: targetInput })
+      });
+      if (resolveRes.uid) {
+        uid = resolveRes.uid;
+        state.log = '✅ Đã tìm thấy UID: ' + uid + ' (từ ' + targetInput + ')';
+      } else {
+        state.log = '❌ Không tìm thấy UID từ link/username: ' + rawInput;
+        renderPage();
+        return;
+      }
+    } catch (e) {
+      state.log = '❌ Lỗi phân giải link FB: ' + e.message;
+      state.userSearchData = null;
+      renderPage();
+      return;
+    }
+  } else {
+    uid = parsed.uid;
+  }
+  
+  state.log = '🔍 Đang tìm kiếm UID ' + uid + '...';
+  renderPage();
+  try {
+    const res = await request('/payment/user/' + uid);
+    state.userSearchData = { uid, ...res.data };
+    state.log = '✅ Tìm thấy thông tin người dùng: ' + (res.data.name || uid);
+    renderPage();
+  } catch (e) {
+    state.log = '❌ Lỗi tra cứu: ' + e.message;
+    state.userSearchData = null;
+    renderPage();
+  }
+}
+
+async function naptiengUser() {
+  const amount = parseInt(document.getElementById('nap-turns-amount').value);
+  if (isNaN(amount)) return;
+  const uid = state.userSearchData.uid;
+  state.log = 'Đang xử lý nạp lượt cho UID ' + uid + '...';
+  renderPage();
+  try {
+    const res = await request('/payment/user/' + uid + '/turns', {
+      method: 'POST',
+      body: JSON.stringify({ turns: amount })
+    });
+    state.log = res.message;
+    // Tải lại thông tin user
+    const userRes = await request('/payment/user/' + uid);
+    state.userSearchData = { uid, ...userRes.data };
+    renderPage();
+  } catch (e) {
+    state.log = 'Lỗi nạp lượt: ' + e.message;
+    renderPage();
+  }
+}
+
+async function capVohanUser() {
+  const days = parseInt(document.getElementById('vohan-days-amount').value);
+  const uid = state.userSearchData.uid;
+  state.log = 'Đang cập nhật gói Vô hạn cho UID ' + uid + '...';
+  renderPage();
+  try {
+    const res = await request('/payment/user/' + uid + '/vohan', {
+      method: 'POST',
+      body: JSON.stringify({ days })
+    });
+    state.log = res.message;
+    // Tải lại thông tin user
+    const userRes = await request('/payment/user/' + uid);
+    state.userSearchData = { uid, ...userRes.data };
+    renderPage();
+  } catch (e) {
+    state.log = 'Lỗi cấp vô hạn: ' + e.message;
+    renderPage();
+  }
+}
+
+async function sendConsoleMessage() {
+  const msgInput = document.getElementById('console-message');
+  const threadSelect = document.getElementById('console-thread-id');
+  const msg = msgInput.value.trim();
+  if (!msg || !threadSelect) return;
+  
+  const threadID = threadSelect.value;
+  const threadName = threadSelect.options[threadSelect.selectedIndex].text;
+  
+  const time = new Date().toLocaleTimeString('vi-VN');
+  state.terminalLogs.push({ time, text: 'Đang gửi lệnh đến [' + threadName + ']: ' + msg });
+  renderPage();
+  
+  msgInput.value = '';
+  try {
+    const res = await request('/threads/' + threadID + '/send', {
+      method: 'POST',
+      body: JSON.stringify({ message: msg })
+    });
+    state.terminalLogs.push({ time, text: 'Kết quả từ Facebook: ' + res.message });
+  } catch (e) {
+    state.terminalLogs.push({ time, text: 'Lỗi gửi lệnh: ' + e.message });
+  }
+  renderPage();
+  
+  // Scroll terminal to bottom
+  const term = document.getElementById('console-terminal');
+  if (term) term.scrollTop = term.scrollHeight;
+}
+
+async function fetchSystemLogs() {
+  const panel = document.getElementById('system-terminal');
+  if (!panel) return;
+  try {
+    const res = await request('/system/logs');
+    panel.innerHTML = esc(res.logs);
+  } catch (e) {
+    panel.innerHTML = 'Lỗi tải log: ' + e.message;
+  }
+}
+
+async function triggerRestartBot() {
+  if (!confirm('Bạn có chắc chắn muốn khởi động lại bot từ xa không? Tiến trình hiện tại sẽ bị tắt và khởi tạo lại.')) return;
+  state.log = 'Đang gửi lệnh khởi động lại bot...';
+  renderPage();
+  try {
+    const res = await request('/system/restart', { method: 'POST' });
+    alert(res.message);
+    logout();
+  } catch (e) {
+    alert('Không thể gửi lệnh restart: ' + e.message);
+    state.log = 'Lỗi restart: ' + e.message;
+    renderPage();
+  }
+}
+
+function switchRecoveryTab(tab) {
+  const cookieSec = document.getElementById('recovery-cookie-sec');
+  const virtualSec = document.getElementById('recovery-virtual-sec');
+  const loginSec = document.getElementById('recovery-login-sec');
+  
+  const tabCookieBtn = document.getElementById('tab-recovery-cookie');
+  const tabVirtualBtn = document.getElementById('tab-recovery-virtual');
+  const tabLoginBtn = document.getElementById('tab-recovery-login');
+  
+  const btnText = document.getElementById('fb-btn-text');
+  const btnEl = document.getElementById('fb-login-btn');
+
+  if (cookieSec) cookieSec.style.display = 'none';
+  if (virtualSec) virtualSec.style.display = 'none';
+  if (loginSec) loginSec.style.display = 'none';
+
+  [tabCookieBtn, tabVirtualBtn, tabLoginBtn].forEach(btn => {
+    if (btn) {
+      btn.style.background = 'transparent';
+      btn.style.borderColor = 'transparent';
+      btn.style.color = 'var(--text-muted)';
+      btn.style.fontWeight = '500';
+    }
+  });
+
+  if (btnEl) btnEl.style.display = 'flex';
+
+  if (tab === 'cookie') {
+    if (cookieSec) cookieSec.style.display = 'block';
+    if (tabCookieBtn) {
+      tabCookieBtn.style.background = 'rgba(99, 102, 241, 0.2)';
+      tabCookieBtn.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+      tabCookieBtn.style.color = 'white';
+      tabCookieBtn.style.fontWeight = '600';
+    }
+    if (btnText) btnText.textContent = 'KHÔI PHỤC APPSTATE';
+    state.recoveryTab = 'cookie';
+  } else if (tab === 'virtual') {
+    if (virtualSec) virtualSec.style.display = 'flex';
+    if (tabVirtualBtn) {
+      tabVirtualBtn.style.background = 'rgba(99, 102, 241, 0.2)';
+      tabVirtualBtn.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+      tabVirtualBtn.style.color = 'white';
+      tabVirtualBtn.style.fontWeight = '600';
+    }
+    if (btnEl) btnEl.style.display = 'none';
+    state.recoveryTab = 'virtual';
+  } else {
+    if (loginSec) loginSec.style.display = 'flex';
+    if (tabLoginBtn) {
+      tabLoginBtn.style.background = 'rgba(99, 102, 241, 0.2)';
+      tabLoginBtn.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+      tabLoginBtn.style.color = 'white';
+      tabLoginBtn.style.fontWeight = '600';
+    }
+    if (btnText) btnText.textContent = 'ĐĂNG NHẬP TÀI KHOẢN BOT';
+    state.recoveryTab = 'login';
+  }
+}
+
+let vbInterval = null;
+
+async function startVirtualBrowser() {
+  const statusEl = document.getElementById('fb-login-status');
+  const btnEl = document.getElementById('fb-login-btn');
+  if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-cyan);">⏳ Đang khởi tạo Trình duyệt ảo...</span>';
+  try {
+    const res = await request('/setup/start-virtual-browser', { method: 'POST' });
+    if (res.success) {
+      document.getElementById('vb-setup-container').style.display = 'none';
+      document.getElementById('vb-active-container').style.display = 'flex';
+      if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-green);">✅ Trình duyệt ảo đã chạy. Hãy nhập tài khoản Facebook ở ô hình dưới.</span>';
+      startScreenRefresh();
+    } else {
+      if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-red);">❌ Lỗi: ' + esc(res.message) + '</span>';
+    }
+  } catch (e) {
+    if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-red);">❌ Lỗi khởi tạo: ' + esc(e.message) + '</span>';
+  }
+}
+
+function startScreenRefresh() {
+  if (vbInterval) clearInterval(vbInterval);
+  const imgEl = document.getElementById('vb-screen-img');
+  const overlay = document.getElementById('vb-loading-overlay');
+  const token = localStorage.getItem('bot_dashboard_token') || '';
+  
+  let isRefreshing = false;
+  vbInterval = setInterval(async () => {
+    if (isRefreshing) return;
+    isRefreshing = true;
+    
+    // Poll the virtual browser status
+    try {
+      const vbStatus = await request('/setup/virtual-browser-status');
+      if (vbStatus && vbStatus.loggedIn) {
+        clearInterval(vbInterval);
+        document.getElementById('fb-login-status').innerHTML = '<span style="color: var(--accent-green);">✅ Đăng nhập thành công! Bot đang lưu AppState và khởi động lại...</span>';
+        setTimeout(() => location.reload(), 10000);
+        return;
+      }
+      if (vbStatus && !vbStatus.active) {
+        clearInterval(vbInterval);
+        document.getElementById('vb-setup-container').style.display = 'flex';
+        document.getElementById('vb-active-container').style.display = 'none';
+        document.getElementById('fb-login-status').innerHTML = '<span style="color: var(--accent-red);">❌ Trình duyệt ảo đã bị đóng.</span>';
+        return;
+      }
+    } catch (_) {}
+    
+    const ts = Date.now();
+    const serverUrl = localStorage.getItem('bot_dashboard_server_url') || '';
+    const url = serverUrl + '/api/setup/virtual-browser-screenshot?token=' + encodeURIComponent(token) + '&_ts=' + ts;
+    
+    const tempImg = new Image();
+    tempImg.src = url;
+    tempImg.onload = () => {
+      if (imgEl) imgEl.src = url;
+      if (overlay) overlay.style.display = 'none';
+      isRefreshing = false;
+    };
+    tempImg.onerror = () => {
+      isRefreshing = false;
+    };
+  }, 200); // GIẢM ĐỘ TRỄ XUỐNG 200MS ĐỂ PHẢN HỒI GẦN NHƯ THỜI GIAN THỰC
+}
+
+async function handleVbClick(event) {
+  const imgEl = event.target;
+  const rect = imgEl.getBoundingClientRect();
+  const x = (event.clientX - rect.left) / rect.width;
+  const y = (event.clientY - rect.top) / rect.height;
+  
+  try {
+    await request('/setup/virtual-browser-action', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'click', x, y })
+    });
+  } catch (e) {
+    console.error('Click error:', e);
+  }
+}
+
+async function sendVbType() {
+  const inputEl = document.getElementById('vb-input-text');
+  const text = inputEl.value;
+  if (!text) return;
+  
+  inputEl.value = '';
+  try {
+    await request('/setup/virtual-browser-action', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'type', text })
+    });
+  } catch (e) {
+    console.error('Type error:', e);
+  }
+}
+
+async function sendVbKey(key) {
+  try {
+    await request('/setup/virtual-browser-action', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'press', key })
+    });
+  } catch (e) {
+    console.error('Key press error:', e);
+  }
+}
+
+function saveGeminiKey() {
+  const inputEl = document.getElementById('gemini-key-input');
+  if (inputEl) {
+    const val = inputEl.value.trim();
+    localStorage.setItem('gemini_api_key', val);
+  }
+}
+
+async function solveVbCaptcha() {
+  const statusEl = document.getElementById('fb-login-status');
+  if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-cyan);">⏳ Đang chụp ảnh và gửi AI giải Captcha...</span>';
+  try {
+    const userKey = localStorage.getItem('gemini_api_key') || '';
+    const res = await request('/setup/virtual-browser-solve-captcha', { 
+      method: 'POST',
+      body: JSON.stringify({ geminiKey: userKey })
+    });
+    if (res.success) {
+      if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-green);">✅ ' + esc(res.message || ('Đã giải thành công mã Captcha: ' + res.code)) + '</span>';
+    } else {
+      if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-red);">❌ Lỗi giải Captcha: ' + esc(res.message) + '</span>';
+    }
+  } catch (e) {
+    if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-red);">❌ Lỗi hệ thống: ' + esc(e.message) + '</span>';
+  }
+}
+
+async function stopVirtualBrowser() {
+  if (vbInterval) clearInterval(vbInterval);
+  document.getElementById('vb-setup-container').style.display = 'flex';
+  document.getElementById('vb-active-container').style.display = 'none';
+  document.getElementById('fb-login-status').innerHTML = '';
+  try {
+    await request('/setup/stop-virtual-browser', { method: 'POST' });
+  } catch (e) {
+    console.error('Stop error:', e);
+  }
+}
+
+async function submitFbLogin() {
+  const emailEl = document.getElementById('fb-email');
+  const passEl = document.getElementById('fb-password');
+  const tfaEl = document.getElementById('fb-2fa-code');
+  const appstateDataEl = document.getElementById('fb-appstate-data');
+  const statusEl = document.getElementById('fb-login-status');
+  const btnEl = document.getElementById('fb-login-btn');
+  const tfaRow = document.getElementById('fb-2fa-row');
+
+  const isCookieTab = !state.recoveryTab || state.recoveryTab === 'cookie';
+  let body = {};
+
+  if (isCookieTab) {
+    const appStateData = (appstateDataEl?.value || '').trim();
+    if (!appStateData) {
+      if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-red);">⚠️ Vui lòng dán AppState JSON hoặc chuỗi Cookie!</span>';
+      return;
+    }
+    body = { appStateData };
+  } else {
+    const email = (emailEl?.value || '').trim();
+    const password = (passEl?.value || '').trim();
+    const twoFaCode = (tfaEl?.value || '').trim();
+
+    if (!email || !password) {
+      if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-red);">⚠️ Vui lòng nhập email và mật khẩu!</span>';
+      return;
+    }
+    body = { email, password };
+    if (twoFaCode) body.twoFaCode = twoFaCode;
+  }
+
+  // Show loading state
+  if (btnEl) {
+    btnEl.disabled = true;
+    btnEl.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="animation: spin 1s linear infinite;"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg> Đang xử lý...';
+  }
+  if (statusEl) statusEl.innerHTML = isCookieTab 
+    ? '<span style="color: var(--accent-cyan);">⏳ Đang xác thực và lưu AppState...</span>'
+    : '<span style="color: var(--accent-cyan);">⏳ Đang kết nối Facebook... Quá trình này có thể mất 10-30 giây.</span>';
+
+  try {
+    const res = await request('/setup/fb-login', {
+      method: 'POST',
+      body: JSON.stringify(body)
+    });
+
+    if (res.needs2FA) {
+      // Show 2FA input field
+      if (tfaRow) tfaRow.style.display = 'block';
+      if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-amber);">🛡️ Tài khoản yêu cầu mã 2FA. Nhập mã và bấm đăng nhập lại.</span>';
+      if (btnEl) {
+        btnEl.disabled = false;
+        btnEl.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> XÁC NHẬN 2FA VÀ ĐĂNG NHẬP';
+      }
+      return;
+    }
+
+    if (res.success) {
+      if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-green);">✅ ' + esc(res.message) + '</span>';
+      if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.innerHTML = '✅ XỬ LÝ THÀNH CÔNG';
+        btnEl.style.background = 'linear-gradient(135deg, var(--accent-green), #059669)';
+      }
+      setTimeout(() => {
+        if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-cyan);">🔄 Bot đang khởi động lại, trang sẽ tự tải lại sau 10 giây...</span>';
+      }, 3000);
+      setTimeout(() => {
+        location.reload();
+      }, 12000);
+    } else {
+      if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-red);">❌ ' + esc(res.message) + '</span>';
+      if (btnEl) {
+        btnEl.disabled = false;
+        btnEl.innerHTML = isCookieTab 
+          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> KHÔI PHỤC APPSTATE'
+          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ĐĂNG NHẬP TÀI KHOẢN BOT';
+      }
+    }
+  } catch (e) {
+    if (statusEl) statusEl.innerHTML = '<span style="color: var(--accent-red);">❌ Lỗi: ' + esc(e.message) + '</span>';
+    if (btnEl) {
+      btnEl.disabled = false;
+      btnEl.innerHTML = isCookieTab 
+        ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> KHÔI PHỤC APPSTATE'
+        : '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ĐĂNG NHẬP TÀI KHOẢN BOT';
+    }
+  }
+}
+
+async function loadTdKeys() {
+  try {
+    const res = await request('/tinhdiem/keys');
+    if (res.success && Array.isArray(res.data)) {
+      state.tdKeys = res.data;
+      renderPage();
+    }
+  } catch (e) {
+    console.error('Lỗi load keys:', e);
+  }
+}
+
+function updateBoardPreview(keyValue) {
+  state.tdKey = keyValue;
+  const token = localStorage.getItem('bot_dashboard_token') || '';
+  const found = state.tdKeys.find(k => k.key === keyValue);
+  if (!found) return;
+  const imgEl = document.getElementById('board-preview-img');
+  const nameEl = document.getElementById('board-preview-name');
+  const emptyEl = document.getElementById('board-preview-empty');
+  if (imgEl) {
+    const serverUrl = localStorage.getItem('bot_dashboard_server_url') || '';
+    imgEl.style.display = '';
+    imgEl.src = serverUrl + '/api/tinhdiem/layout-preview/' + encodeURIComponent(found.idbang) + '?token=' + encodeURIComponent(token);
+    imgEl.onerror = () => { imgEl.style.display = 'none'; if (emptyEl) emptyEl.style.display = 'block'; };
+    imgEl.onload = () => { if (emptyEl) emptyEl.style.display = 'none'; };
+  }
+  if (nameEl) nameEl.textContent = found.label;
+}
+
+async function runTinhDiem() {
+  const accountId = (document.getElementById('td-account-id')?.value || '').trim();
+  const slotId = parseInt(document.getElementById('td-slot')?.value || '1');
+  const key = document.getElementById('td-key')?.value || 'EMDUA';
+  const date = document.getElementById('td-date')?.value || '';
+
+  if (!accountId) {
+    alert('❌ Vui lòng nhập ID Garena!');
+    return;
+  }
+
+  state.tdAccountId = accountId;
+  state.tdSlotId = slotId;
+  state.tdKey = key;
+  state.tdDate = date;
+  state.tdLoading = true;
+  state.tdResult = null;
+  renderPage();
+
+  try {
+    const res = await request('/tinhdiem', {
+      method: 'POST',
+      body: JSON.stringify({ accountId, slotId, key, date })
+    });
+    state.tdResult = res;
+  } catch (e) {
+    state.tdResult = { success: false, message: e.message };
+  }
+
+  state.tdLoading = false;
+  renderPage();
+}
+
+function clearTdResult() {
+  state.tdResult = null;
+  renderPage();
+}
+
+function saveTdImage() {
+  if (!state.tdResult || !state.tdResult.imageUrl) return;
+  const link = document.createElement('a');
+  link.href = state.tdResult.imageUrl;
+  
+  const accountId = state.tdResult.info?.accountId || 'ff';
+  const key = state.tdResult.info?.key || 'bang';
+  const slot = state.tdResult.info?.slotId || '';
+  
+  link.download = 'tinhdiem_' + accountId + '_' + key + '_slot' + slot + '.png';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+async function shareTdImage() {
+  if (!state.tdResult || !state.tdResult.imageUrl) return;
+  
+  const base64Data = state.tdResult.imageUrl;
+  const accountId = state.tdResult.info?.accountId || 'ff';
+  const key = state.tdResult.info?.key || 'bang';
+  const slot = state.tdResult.info?.slotId || '';
+  const fileName = 'tinhdiem_' + accountId + '_' + key + '_slot' + slot + '.png';
+
+  try {
+    const res = await fetch(base64Data);
+    const blob = await res.blob();
+    const file = new File([blob], fileName, { type: 'image/png' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: 'Bảng điểm Free Fire',
+        text: 'Bảng điểm ID Garena: ' + accountId + ' - Key: ' + key + ' - Khung giờ: ' + (state.tdResult.info?.timeRange || '')
+      });
+      return;
+    }
+  } catch (err) {
+    console.warn('Web Share error:', err);
+  }
+
+  // Fallback to Clipboard API
+  try {
+    const res = await fetch(base64Data);
+    const blob = await res.blob();
+    if (navigator.clipboard && navigator.clipboard.write) {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob
+        })
+      ]);
+      alert('📋 Đã sao chép ảnh bảng điểm vào Khay nhớ tạm (Clipboard). Bạn có thể dán (Ctrl+V) để gửi!');
+      return;
+    }
+  } catch (err) {
+    console.warn('Clipboard write error:', err);
+  }
+
+  // Final fallback: Open in new tab
+  try {
+    const newWindow = window.open();
+    if (newWindow) {
+      newWindow.document.write('<img src="' + base64Data + '" style="max-width:100%; height:auto;" alt="Bảng điểm">');
+      newWindow.document.title = fileName;
+      newWindow.document.close();
+      alert('🌐 Trình duyệt không hỗ trợ chia sẻ trực tiếp. Đã mở ảnh trong tab mới để bạn có thể lưu hoặc chia sẻ thủ công.');
+      return;
+    }
+  } catch (err) {
+    console.warn('New tab error:', err);
+  }
+
+  alert('❌ Thiết bị hoặc trình duyệt của bạn không hỗ trợ tính năng chia sẻ này.');
+}
+
+async function refreshAntiStatus() {
+  state.log = '🔄 Đang cập nhật trạng thái anti từ server...';
+  renderPage();
+  try {
+    await load();
+    state.log = '✅ Đã cập nhật trạng thái anti thành công!';
+    renderPage();
+  } catch (e) {
+    state.log = '❌ Lỗi cập nhật: ' + e.message;
+    renderPage();
+  }
+}
+
+async function syncAntiStatus() {
+  state.log = '⚡ Đang đồng bộ anti settings cho tất cả nhóm...';
+  renderPage();
+  try {
+    const res = await request('/sync-anti', { method: 'POST' });
+    state.log = '✅ ' + res.message;
+    await load();
+    renderPage();
+  } catch (e) {
+    state.log = '❌ Lỗi đồng bộ: ' + e.message;
+    renderPage();
+  }
+}
+
+(async () => {
+  if (!localStorage.getItem('bot_dashboard_token')) {
+    return renderLogin();
+  }
+  try {
+    await load();
+    renderPage();
+
+    // Ticking Uptime client-side every 1 second
+    setInterval(() => {
+      if (state.status && state.status.uptimeMs !== undefined) {
+        state.status.uptimeMs += 1000;
+        const uptimeEl = document.getElementById('metric-uptime');
+        if (uptimeEl) {
+          const total = Math.max(0, Math.floor(state.status.uptimeMs / 1000));
+          const h = Math.floor(total / 3600);
+          const m = Math.floor((total % 3600) / 60);
+          const s = total % 60;
+          uptimeEl.innerText = h + "h " + m + "m " + s + "s";
+        }
+      }
+    }, 1000);
+
+    // Fetching /status to update memory and sync uptime every 5 seconds
+    setInterval(async () => {
+      try {
+        const statusRes = await request('/status');
+        if (statusRes && statusRes.data) {
+          state.status = statusRes.data;
+          
+          const memEl = document.getElementById('metric-memory');
+          if (memEl) memEl.innerText = state.status.memory;
+        }
+      } catch (e) {}
+    }, 5000);
+
+    // Load full data (including threads) every 15 seconds
+    setInterval(async () => {
+      try {
+        await load();
+        if (state.activeTab === 'box') {
+          // chỉ render lại danh sách thread, tránh giật màn hình
+          filterThreads();
+        }
+      } catch (e) {}
+    }, 15000);
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
+      });
+    }
+  } catch (e) {
+    renderLogin(e.message);
+  }
+})();
+</script>
+</body>
+</html>
